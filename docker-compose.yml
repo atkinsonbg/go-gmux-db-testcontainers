@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  api:
+    container_name: go-mux-api
+    image: github.com/atkinsonbg/go-gmux-proper-unit-testing/api:latest
+    environment:
+      DBHOST: go-mux-db
+      DBNAME: go-mux-db
+      DBUSER: postgres
+    ports:
+      - 80:80
+
+  database:
+    container_name: go-mux-db
+    image: postgres:11.6-alpine
+    environment:
+      POSTGRES_DB: go-mux-db
+    volumes:
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
+
+  dozzle:
+    container_name: go-mux-dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8888:8080
