@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/atkinsonbg/go-gmux-proper-unit-testing/database"
-	"github.com/atkinsonbg/go-gmux-proper-unit-testing/handlers"
+	"github.com/atkinsonbg/go-gmux-db-testcontainers/database"
+	"github.com/atkinsonbg/go-gmux-db-testcontainers/handlers"
 	"github.com/gorilla/mux"
 )
 

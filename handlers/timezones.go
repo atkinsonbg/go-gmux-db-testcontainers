@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/atkinsonbg/go-gmux-proper-unit-testing/database"
+	"github.com/atkinsonbg/go-gmux-db-testcontainers/database"
 	"github.com/gorilla/mux"
 )
 

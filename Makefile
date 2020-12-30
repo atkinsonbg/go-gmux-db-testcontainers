@@ -1,5 +1,8 @@
+include .env
+export
+
 run:
-	go run github.com/atkinsonbg/go-gmux-proper-unit-testing
+	go run github.com/atkinsonbg/go-gmux-db-testcontainers
 
 up:
 	docker-compose down
@@ -11,19 +14,10 @@ down:
 	docker-compose down
 
 docker:
-	docker build -t github.com/atkinsonbg/go-gmux-proper-unit-testing/api:latest .
+	docker build -t github.com/atkinsonbg/go-gmux-db-testcontainers:latest .
 
 dockerrun:
-	docker run -it github.com/atkinsonbg/go-gmux-proper-unit-testing/api:latest
+	docker run -it github.com/atkinsonbg/go-gmux-db-testcontainers:latest
 
-dockertest:
-	docker build -f Dockerfile.test -t atkinsonbg/go-postgres-test:local .
-
-dockertestrun:
-	docker run -it github.com/atkinsonbg/go-gmux-proper-unit-testing/tests:latest
-
-testlocal:	dockertest
-	docker run -v ${PWD}/cover.out:/testdir/cover.out -e GIT_URL='' atkinsonbg/go-postgres-test:local
-
-testremote:
-	docker run -v ${PWD}/cover.out:/testdir/cover.out -e GIT_URL='https://github.com/atkinsonbg/go-gmux-unit-testing.git' atkinsonbg/go-postgres-test:latest
+test:
+	go test -v ./...

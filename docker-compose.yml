@@ -3,7 +3,7 @@ version: "3.7"
 services:
   api:
     container_name: go-mux-api
-    image: github.com/atkinsonbg/go-gmux-proper-unit-testing/api:latest
+    image: github.com/atkinsonbg/go-gmux-db-testcontainers:latest
     environment:
       DBHOST: go-mux-db
       DBNAME: go-mux-db

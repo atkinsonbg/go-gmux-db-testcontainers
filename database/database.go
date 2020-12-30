@@ -17,13 +17,14 @@ type Config struct {
 	User string `envconfig:"DBUSER"`
 	Name string `envconfig:"DBNAME"`
 	Host string `envconfig:"DBHOST"`
+	Port string `envconfig:"DBPORT"`
 }
 
 // InitDB connects to the database
 func InitDB() {
 	c := dbConfig()
-	psqlInfo := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable",
-		c.Host, c.User, c.Name)
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable",
+		c.Host, c.Port, c.User, c.Name)
 
 	var err error
 	db, err = sql.Open("postgres", psqlInfo)
