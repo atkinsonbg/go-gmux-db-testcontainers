@@ -18,22 +18,25 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	// Work out the path to the 'scripts' directory and set mount strings
 	packageName := "handlers"
-	path, _ := os.Getwd()
-	path2 := strings.Replace(path, packageName, "", 1)
-	mountFrom := fmt.Sprintf("%s/scripts/init.sql", path2)
+	workingDir, _ := os.Getwd()
+	rootDir := strings.Replace(workingDir, packageName, "", 1)
+	mountFrom := fmt.Sprintf("%s/scripts/init.sql", rootDir)
 	mountTo := "/docker-entrypoint-initdb.d/init.sql"
 
+	// Create the Postgres TestContainer
 	ctx := context.Background()
 	req := testcontainers.ContainerRequest{
 		Image:        "postgres:11.6-alpine",
 		ExposedPorts: []string{"5432/tcp"},
 		BindMounts:   map[string]string{mountFrom: mountTo},
 		Env: map[string]string{
-			"POSTGRES_DB": "postgresTC",
+			"POSTGRES_DB": os.Getenv("DBNAME"),
 		},
 		WaitingFor: wait.ForLog("database system is ready to accept connections"),
 	}
+
 	postgresC, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: req,
 		Started:          true,
@@ -42,12 +45,13 @@ func TestMain(m *testing.M) {
 		// Panic and fail since there isn't much we can do if the container doesn't start
 		panic(err)
 	}
+
 	defer postgresC.Terminate(ctx)
 
+	// Get the port mapped to 5432 and set as ENV
 	p, _ := postgresC.MappedPort(ctx, "5432")
 	os.Setenv("DBPORT", p.Port())
 
-	fmt.Println("Initing DB")
 	db.InitDB()
 
 	exitVal := m.Run()
